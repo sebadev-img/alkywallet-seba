@@ -1,5 +1,6 @@
 package com.alkemy.wallet.controller;
 
+import com.alkemy.wallet.dto.UserDto;
 import com.alkemy.wallet.entity.User;
 import com.alkemy.wallet.service.IUserService;
 import com.alkemy.wallet.service.UserServiceImpl;
@@ -20,9 +21,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<User>> getUsers(){
-        //TODO: devolver un dto de users?
-        List<User> users = userService.getUsers();
+    public ResponseEntity<List<UserDto>> getUsers(){
+        List<UserDto> users = userService.getUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
