@@ -1,5 +1,6 @@
 package com.alkemy.wallet.service;
 
+import com.alkemy.wallet.dto.UserDto;
 import com.alkemy.wallet.entity.User;
 import com.alkemy.wallet.repository.IUserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,9 +21,18 @@ public class UserServiceImpl implements IUserService{
     }
 
     @Override
-    public List<User> getUsers() {
-        //TODO: crear dto de users?
-        return userRepository.findAll();
+    public List<UserDto> getUsers() {
+        List<User> users = userRepository.findAll();
+        List<UserDto> usersDto = users.stream().map((user) -> {
+            return new UserDto(
+                    user.getFirstName(),
+                    user.getLastName(),
+                    user.getEmail(),
+                    user.getRole().getName().name(),
+                    null
+            );
+        }).toList();
+        return usersDto;
     }
 
     @Override
