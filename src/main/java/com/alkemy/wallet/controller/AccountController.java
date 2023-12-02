@@ -1,5 +1,6 @@
 package com.alkemy.wallet.controller;
 
+import com.alkemy.wallet.dto.AccountDto;
 import com.alkemy.wallet.dto.request.CreateAccountDto;
 import com.alkemy.wallet.entity.Account;
 import com.alkemy.wallet.service.AccountServiceImpl;
@@ -22,8 +23,8 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<List<Account>> getAccountsByUserId(@PathVariable Long id) {
-        List<Account> accountsDto = accountService.getAccountsByUserId(id);
+    public ResponseEntity<List<AccountDto>> getAccountsByUserId(@PathVariable Long id) {
+        List<AccountDto> accountsDto = accountService.getAccountsByUserId(id);
         return new ResponseEntity<>(accountsDto, HttpStatus.OK);
     }
 
