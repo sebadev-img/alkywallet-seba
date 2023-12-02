@@ -2,6 +2,9 @@ package com.alkemy.wallet.service;
 
 import com.alkemy.wallet.entity.User;
 import com.alkemy.wallet.repository.IUserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,5 +36,16 @@ public class UserServiceImpl implements IUserService{
             return user;
         }
         return null;
+    }
+
+    @Override
+    public UserDetailsService userDetailsService() {
+        return new UserDetailsService() {
+            @Override
+            public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+                return userRepository.findByEmail(username)
+                        .orElseThrow(()->new UsernameNotFoundException("User not found"));
+            }
+        };
     }
 }
