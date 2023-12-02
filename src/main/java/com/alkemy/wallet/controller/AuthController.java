@@ -1,6 +1,7 @@
 package com.alkemy.wallet.controller;
 
 
+import com.alkemy.wallet.dto.request.LoginRequestDto;
 import com.alkemy.wallet.dto.request.RegisterRequestDto;
 import com.alkemy.wallet.dto.response.JwtAuthenticationResponseDto;
 import com.alkemy.wallet.service.AuthServiceImpl;
@@ -27,5 +28,11 @@ public class AuthController {
     public ResponseEntity<JwtAuthenticationResponseDto> registerUser(@RequestBody RegisterRequestDto registerRequest){
         JwtAuthenticationResponseDto token = authService.registerUser(registerRequest);
         return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
+   @PostMapping("/login")
+    public ResponseEntity<JwtAuthenticationResponseDto> loginUser(@RequestBody LoginRequestDto loginRequest){
+        JwtAuthenticationResponseDto token = authService.loginUser(loginRequest);
+        return new ResponseEntity<>(token,HttpStatus.OK);
     }
 }
