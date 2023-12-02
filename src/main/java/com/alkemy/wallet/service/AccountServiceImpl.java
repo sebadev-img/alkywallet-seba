@@ -1,5 +1,6 @@
 package com.alkemy.wallet.service;
 
+import com.alkemy.wallet.dto.AccountDto;
 import com.alkemy.wallet.entity.Account;
 import com.alkemy.wallet.entity.User;
 import com.alkemy.wallet.enums.ECurrency;
@@ -23,11 +24,22 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
-    public List<Account> getAccountsByUserId(Long id) {
-        Optional<User> optionalUser = userRepository.findById(id);
+    public List<AccountDto> getAccountsByUserId(Long userId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
         if (optionalUser.isPresent()) {
             List<Account> accounts = optionalUser.get().getAccounts();
-            return accounts;
+            List<AccountDto> accountsDto = accounts.stream().map(account -> {
+                return new AccountDto(
+                       optionalUser.get().getEmail(),
+                       account.getId(),
+                       account.getCurrency().name(),
+                       account.getBalance(),
+                       account.getTransactionLimit(),
+                       null,
+                       null
+                );
+            }).toList();
+            return accountsDto;
         }
         return null;
     }
