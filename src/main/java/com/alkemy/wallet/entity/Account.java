@@ -51,9 +51,9 @@ public class Account {
     @JoinColumn(name="USER_ID", referencedColumnName = "ID")
     private User user;
 
-    @OneToMany(mappedBy = "accountId")
+    @OneToMany(mappedBy = "account")
     private List<Transaction> transactions;
 
-    @OneToMany(mappedBy = "accountID")
+    @OneToMany(mappedBy = "account")
     private List<FixedTermDeposit> fixedTermDeposits;
 }

@@ -52,7 +52,7 @@ public class User {
     @JoinColumn(name="ROLE_ID", referencedColumnName = "ID")
     private Role role;
 
-    @OneToMany(mappedBy = "userId")
+    @OneToMany(mappedBy = "user")
     private List<Account> accounts;
 
 }
