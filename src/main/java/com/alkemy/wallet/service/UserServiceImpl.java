@@ -4,6 +4,7 @@ import com.alkemy.wallet.entity.User;
 import com.alkemy.wallet.repository.IUserRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -13,6 +14,12 @@ public class UserServiceImpl implements IUserService{
 
     public UserServiceImpl(IUserRepository userRepository){
         this.userRepository = userRepository;
+    }
+
+    @Override
+    public List<User> getUsers() {
+        //TODO: crear dto de users?
+        return userRepository.findAll();
     }
 
     @Override
