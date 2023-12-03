@@ -52,7 +52,7 @@ public class User implements UserDetails {
     @Column(name = "SOFT_DELETE")
     private Boolean softDelete;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name="ROLE_ID", referencedColumnName = "ID")
     private Role role;
 
