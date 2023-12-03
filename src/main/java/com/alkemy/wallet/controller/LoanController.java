@@ -3,7 +3,7 @@ package com.alkemy.wallet.controller;
 import com.alkemy.wallet.dto.request.LoanRequestDto;
 import com.alkemy.wallet.dto.response.LoanResponseDto;
 import com.alkemy.wallet.service.ILoanService;
-import com.alkemy.wallet.service.LoanService;
+import com.alkemy.wallet.service.LoanServiceImpl;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,7 +15,7 @@ public class LoanController {
 
     private final ILoanService loanService;
 
-    public LoanController(LoanService loanService) {
+    public LoanController(LoanServiceImpl loanService) {
         this.loanService = loanService;
     }
 

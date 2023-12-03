@@ -6,16 +6,15 @@ import com.alkemy.wallet.entity.User;
 import com.alkemy.wallet.repository.IUserRepository;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.util.Optional;
 
 @Service
-public class LoanService implements ILoanService{
+public class LoanServiceImpl implements ILoanService{
 
     private final IJwtService jwtService;
     private final IUserRepository userRepository;
 
-    public LoanService(JwtServiceImpl jwtService, IUserRepository userRepository) {
+    public LoanServiceImpl(JwtServiceImpl jwtService, IUserRepository userRepository) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;
     }
