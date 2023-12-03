@@ -19,10 +19,10 @@ public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="ID")
-    private long id;
+    private Long id;
 
     @Column(name = "AMOUNT", nullable = false)
-    private double amount;
+    private Double amount;
 
     @Column(name = "TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
