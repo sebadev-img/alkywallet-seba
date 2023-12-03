@@ -1,10 +1,11 @@
 package com.alkemy.wallet.controller;
 
 import com.alkemy.wallet.dto.AccountDto;
-import com.alkemy.wallet.dto.request.CreateAccountDto;
-import com.alkemy.wallet.entity.Account;
+
+
 import com.alkemy.wallet.service.AccountServiceImpl;
 import com.alkemy.wallet.service.IAccountService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -28,10 +29,10 @@ public class AccountController {
         return new ResponseEntity<>(accountsDto, HttpStatus.OK);
     }
 
-    @PostMapping
-    public ResponseEntity<Account> createAccount(@RequestBody CreateAccountDto body){
+    @PostMapping()
+    public ResponseEntity<AccountDto> createAccount(@RequestParam String currency, @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
         //TODO: crear dto de respuesta
-       Account account = accountService.createAccount(body.getUserId(),body.getCurrency());
+       AccountDto account = accountService.createAccount(currency,token);
        return new ResponseEntity<>(account,HttpStatus.CREATED);
     }
 
