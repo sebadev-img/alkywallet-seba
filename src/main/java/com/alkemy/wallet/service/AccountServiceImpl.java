@@ -17,10 +17,12 @@ public class AccountServiceImpl implements IAccountService {
 
     private final IUserRepository userRepository;
     private final IAccountRepository accountRepository;
+    private final IJwtService jwtService;
 
-    public AccountServiceImpl(IUserRepository userRepository, IAccountRepository accountRepository) {
+    public AccountServiceImpl(IUserRepository userRepository, IAccountRepository accountRepository, JwtServiceImpl jwtService) {
         this.userRepository = userRepository;
         this.accountRepository = accountRepository;
+        this.jwtService = jwtService;
     }
 
     @Override
@@ -45,19 +47,20 @@ public class AccountServiceImpl implements IAccountService {
     }
 
     @Override
-    public Account createAccount(Long userId, ECurrency currency) {
+    public AccountDto createAccount(String currency, String token) {
         //TODO: user dto para mapear la respuesta
-        Optional<User> userOptional = userRepository.findById(userId);
+        String userEmail = jwtService.extractUserName(token.substring(7));
+        Optional<User> userOptional = userRepository.findByEmail(userEmail);
         if(userOptional.isPresent()){
             User user = userOptional.get();
             List<Account> userAccounts = user.getAccounts();
             Optional<Account> accountOptional = userAccounts.stream()
-                    .filter(account -> account.getCurrency() == currency)
+                    .filter(account -> account.getCurrency().name().equals(currency))
                     .findFirst();
             if(accountOptional.isEmpty()){
                 Account newAccount = new Account();
-                newAccount.setCurrency(currency);
-                newAccount.setTransactionLimit(currency == ECurrency.ARS ? 300000.0 : 1000.0);
+                newAccount.setCurrency(ECurrency.valueOf(currency));
+                newAccount.setTransactionLimit(currency.equals(ECurrency.ARS.name()) ? 300000.0 : 1000.0);
                 newAccount.setBalance(0.0);
                 newAccount.setUser(user);
                 accountRepository.save((newAccount));

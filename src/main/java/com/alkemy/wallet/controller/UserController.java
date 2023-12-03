@@ -4,6 +4,7 @@ import com.alkemy.wallet.dto.UserDto;
 import com.alkemy.wallet.entity.User;
 import com.alkemy.wallet.service.IUserService;
 import com.alkemy.wallet.service.UserServiceImpl;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,7 +22,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getUsers(){
+    public ResponseEntity<List<UserDto>> getUsers(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
+        System.out.println(token); // borrar
         List<UserDto> users = userService.getUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
@@ -29,6 +31,7 @@ public class UserController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<User> deleteUser(@PathVariable Long id){
+
         User user=userService.deleteUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
     }

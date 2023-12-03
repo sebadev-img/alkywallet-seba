@@ -10,6 +10,6 @@ public interface IAccountService {
 
     List<AccountDto> getAccountsByUserId(Long userId);
 
-    Account createAccount(Long userId, ECurrency currency);
+    AccountDto createAccount(String currency, String token);
 
 }
