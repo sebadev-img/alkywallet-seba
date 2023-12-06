@@ -36,9 +36,7 @@ public class AccountServiceImpl implements IAccountService {
                        account.getId(),
                        account.getCurrency().name(),
                        account.getBalance(),
-                       account.getTransactionLimit(),
-                       null,
-                       null
+                       account.getTransactionLimit()
                 );
             }).toList();
             return accountsDto;

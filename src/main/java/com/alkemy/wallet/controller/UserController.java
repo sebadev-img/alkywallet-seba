@@ -22,8 +22,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserDto>> getUsers(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
-        System.out.println(token); // borrar
+    public ResponseEntity<List<UserDto>> getUsers(){
         List<UserDto> users = userService.getUsers();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }

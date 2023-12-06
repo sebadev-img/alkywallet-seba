@@ -15,6 +15,4 @@ public class AccountDto {
     private String currency;
     private Double balance;
     private Double transactionLimit;
-    private List<?> transactions;
-    private List<?> fixedTermDeposits;
 }
