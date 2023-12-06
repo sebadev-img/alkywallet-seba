@@ -7,5 +7,6 @@ import com.alkemy.wallet.dto.response.JwtAuthenticationResponseDto;
 public interface IAuthService {
 
     public JwtAuthenticationResponseDto registerUser(RegisterRequestDto registerRequest);
+    public JwtAuthenticationResponseDto registerAdmin(RegisterRequestDto registerRequest);
     public JwtAuthenticationResponseDto loginUser(LoginRequestDto loginRequest);
 }

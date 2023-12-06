@@ -47,6 +47,21 @@ public class AuthServiceImpl implements IAuthService{
     }
 
     @Override
+    public JwtAuthenticationResponseDto registerAdmin(RegisterRequestDto registerRequest) {
+        User newUser = new User();
+        newUser.setFirstName(registerRequest.getFirstName());
+        newUser.setLastName(registerRequest.getLastName());
+        newUser.setEmail(registerRequest.getEmail());
+        newUser.setPassword(passwordEncoder.encode(registerRequest.getPassword())); //
+        Role userRole = roleRepository.findByName(ERole.ADMIN).get(); // find by nombre
+        newUser.setRole(userRole); //TODO: el rol ya existe
+        newUser.setAccounts(null); //TODO: crearle cuentas
+        userRepository.save(newUser);
+        String jwt = jwtService.generateToken(newUser);
+        return new JwtAuthenticationResponseDto(jwt);
+    }
+
+    @Override
     public JwtAuthenticationResponseDto loginUser(LoginRequestDto loginRequest) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword())
