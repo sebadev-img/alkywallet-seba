@@ -24,6 +24,12 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @PostMapping("/register/admin")
+    public ResponseEntity<JwtAuthenticationResponseDto> registerAdmin(@RequestBody RegisterRequestDto registerRequest){
+        JwtAuthenticationResponseDto token = authService.registerAdmin(registerRequest);
+        return new ResponseEntity<>(token, HttpStatus.OK);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<JwtAuthenticationResponseDto> registerUser(@RequestBody RegisterRequestDto registerRequest){
         JwtAuthenticationResponseDto token = authService.registerUser(registerRequest);
