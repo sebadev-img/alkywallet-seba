@@ -5,6 +5,7 @@ import com.alkemy.wallet.dto.request.SimulateFixedTermDepositRequestDto;
 import com.alkemy.wallet.dto.response.SimulateFixedTermDepositResponseDto;
 import com.alkemy.wallet.service.FixedTermDepositServiceImpl;
 import com.alkemy.wallet.service.IFixedTermDepositService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class FixedTermDepositController {
     }
 
     @PostMapping("/simulate")
-    public ResponseEntity<SimulateFixedTermDepositResponseDto> simulateFixedTermDeposit(@RequestBody SimulateFixedTermDepositRequestDto fixedTermRequest, @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
+    public ResponseEntity<SimulateFixedTermDepositResponseDto> simulateFixedTermDeposit(@Valid @RequestBody SimulateFixedTermDepositRequestDto fixedTermRequest, @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
         SimulateFixedTermDepositResponseDto fixedTermResponse = fixedTermService.simulateFixedTermDeposit(fixedTermRequest,token);
         return new ResponseEntity<>(fixedTermResponse, HttpStatus.OK);
     }
