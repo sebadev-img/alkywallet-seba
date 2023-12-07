@@ -6,6 +6,7 @@ import com.alkemy.wallet.dto.request.RegisterRequestDto;
 import com.alkemy.wallet.dto.response.JwtAuthenticationResponseDto;
 import com.alkemy.wallet.service.AuthServiceImpl;
 import com.alkemy.wallet.service.IAuthService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +32,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<JwtAuthenticationResponseDto> registerUser(@RequestBody RegisterRequestDto registerRequest){
+    public ResponseEntity<JwtAuthenticationResponseDto> registerUser(@Valid @RequestBody RegisterRequestDto registerRequest){
         JwtAuthenticationResponseDto token = authService.registerUser(registerRequest);
         return new ResponseEntity<>(token, HttpStatus.OK);
     }
