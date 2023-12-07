@@ -5,6 +5,7 @@ import com.alkemy.wallet.dto.TransactionDto;
 import com.alkemy.wallet.dto.request.DepositRequestDto;
 import com.alkemy.wallet.service.ITransactionService;
 import com.alkemy.wallet.service.TransactionServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class TransactionController {
     }
 
     @PostMapping("/deposit")
-    public ResponseEntity<Boolean> createDeposit(@RequestBody DepositRequestDto depositRequest, @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
+    public ResponseEntity<Boolean> createDeposit(@Valid @RequestBody DepositRequestDto depositRequest, @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
         Boolean response = transactionService.createDeposit(depositRequest,token);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

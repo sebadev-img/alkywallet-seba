@@ -4,6 +4,7 @@ import com.alkemy.wallet.dto.request.LoanRequestDto;
 import com.alkemy.wallet.dto.response.LoanResponseDto;
 import com.alkemy.wallet.service.ILoanService;
 import com.alkemy.wallet.service.LoanServiceImpl;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ public class LoanController {
     }
 
     @PostMapping("/simulate")
-    public ResponseEntity<LoanResponseDto> simulateLoan(@RequestBody LoanRequestDto loanRequest, @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
+    public ResponseEntity<LoanResponseDto> simulateLoan(@Valid @RequestBody LoanRequestDto loanRequest, @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
         LoanResponseDto loanResponse = loanService.calculateLoan(loanRequest,token);
         return new ResponseEntity<>(loanResponse, HttpStatus.OK);
     }
