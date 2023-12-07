@@ -43,7 +43,12 @@ public class AuthServiceImpl implements IAuthService{
         newUser.setAccounts(null); //TODO: crearle cuentas
         userRepository.save(newUser);
         String jwt = jwtService.generateToken(newUser);
-        return new JwtAuthenticationResponseDto(jwt);
+        return new JwtAuthenticationResponseDto(
+                registerRequest.getEmail(),
+                registerRequest.getFirstName(),
+                registerRequest.getLastName(),
+                jwt
+        );
     }
 
     @Override
@@ -58,7 +63,12 @@ public class AuthServiceImpl implements IAuthService{
         newUser.setAccounts(null); //TODO: crearle cuentas
         userRepository.save(newUser);
         String jwt = jwtService.generateToken(newUser);
-        return new JwtAuthenticationResponseDto(jwt);
+        return new JwtAuthenticationResponseDto(
+                registerRequest.getEmail(),
+                registerRequest.getFirstName(),
+                registerRequest.getLastName(),
+                jwt
+        );
     }
 
     @Override
@@ -66,9 +76,14 @@ public class AuthServiceImpl implements IAuthService{
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(loginRequest.getEmail(),loginRequest.getPassword())
         );
-        UserDetails user = userRepository.findByEmail(loginRequest.getEmail())
+        User user = userRepository.findByEmail(loginRequest.getEmail())
                                             .orElseThrow(()-> new IllegalArgumentException("Invalid Email or Password"));
         String jwt = jwtService.generateToken(user);
-        return new JwtAuthenticationResponseDto(jwt);
+        return new JwtAuthenticationResponseDto(
+                user.getEmail(),
+                user.getFirstName(),
+                user.getLastName(),
+                jwt
+        );
     }
 }

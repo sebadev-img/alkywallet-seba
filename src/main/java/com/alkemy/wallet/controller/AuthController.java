@@ -26,19 +26,19 @@ public class AuthController {
     }
 
     @PostMapping("/register/admin")
-    public ResponseEntity<JwtAuthenticationResponseDto> registerAdmin(@RequestBody RegisterRequestDto registerRequest){
+    public ResponseEntity<JwtAuthenticationResponseDto> registerAdmin(@Valid @RequestBody RegisterRequestDto registerRequest){
         JwtAuthenticationResponseDto token = authService.registerAdmin(registerRequest);
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return new ResponseEntity<>(token, HttpStatus.CREATED);
     }
 
     @PostMapping("/register")
     public ResponseEntity<JwtAuthenticationResponseDto> registerUser(@Valid @RequestBody RegisterRequestDto registerRequest){
         JwtAuthenticationResponseDto token = authService.registerUser(registerRequest);
-        return new ResponseEntity<>(token, HttpStatus.OK);
+        return new ResponseEntity<>(token, HttpStatus.CREATED);
     }
 
    @PostMapping("/login")
-    public ResponseEntity<JwtAuthenticationResponseDto> loginUser(@RequestBody LoginRequestDto loginRequest){
+    public ResponseEntity<JwtAuthenticationResponseDto> loginUser(@Valid @RequestBody LoginRequestDto loginRequest){
         JwtAuthenticationResponseDto token = authService.loginUser(loginRequest);
         return new ResponseEntity<>(token,HttpStatus.OK);
     }
