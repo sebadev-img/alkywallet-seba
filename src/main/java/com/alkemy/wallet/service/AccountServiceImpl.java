@@ -1,6 +1,7 @@
 package com.alkemy.wallet.service;
 
 import com.alkemy.wallet.dto.AccountDto;
+import com.alkemy.wallet.dto.request.UpdateAccountRequestDto;
 import com.alkemy.wallet.dto.response.PageableAccountResponseDto;
 import com.alkemy.wallet.entity.Account;
 import com.alkemy.wallet.entity.User;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -96,6 +98,33 @@ public class AccountServiceImpl implements IAccountService {
                 newAccount.setBalance(0.0);
                 newAccount.setUser(user);
                 accountRepository.save((newAccount));
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public AccountDto updateTransactionLimit(Long id, UpdateAccountRequestDto updateRequest,String token) {
+        Optional<Account> accountOptional = accountRepository.findById(id);
+        if(accountOptional.isPresent()){
+            Account account = accountOptional.get();
+            String userEmail = jwtService.extractUserName(token.substring(7));
+            Optional<User> userOptional = userRepository.findByEmail(userEmail);
+            if(userOptional.isPresent()){
+                User user = userOptional.get();
+                if(Objects.equals(account.getUser().getId(), user.getId())){
+                    if(updateRequest.getNewTransactionLimit() > 0.0){
+                        account.setTransactionLimit(updateRequest.getNewTransactionLimit());
+                        accountRepository.save(account);
+                        return new AccountDto(
+                                userEmail,
+                                account.getId(),
+                                account.getCurrency().name(),
+                                account.getBalance(),
+                                account.getTransactionLimit()
+                        );
+                    }
+                }
             }
         }
         return null;
