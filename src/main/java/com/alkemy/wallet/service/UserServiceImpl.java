@@ -28,7 +28,7 @@ public class UserServiceImpl implements IUserService{
     @Override
     public PageableUserResponseDto getUsers(int page) {
         int pageToFind = page > 0 ? page-1 : 0;
-        PageRequest pr = PageRequest.of(pageToFind,1);
+        PageRequest pr = PageRequest.of(pageToFind,10);
         Page<User> userPage = userRepository.findAll(pr);
         long count = userPage.getTotalElements();
         int pages = userPage.getTotalPages();

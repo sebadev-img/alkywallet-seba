@@ -3,6 +3,7 @@ package com.alkemy.wallet.controller;
 import com.alkemy.wallet.dto.AccountDto;
 
 
+import com.alkemy.wallet.dto.response.PageableAccountResponseDto;
 import com.alkemy.wallet.service.AccountServiceImpl;
 import com.alkemy.wallet.service.IAccountService;
 import org.springframework.http.HttpHeaders;
@@ -21,6 +22,12 @@ public class AccountController {
 
     public AccountController(AccountServiceImpl accountService) {
         this.accountService = accountService;
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllAccounts(@RequestParam(defaultValue = "0") int page){
+        PageableAccountResponseDto response = accountService.getAllAccounts(page);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
