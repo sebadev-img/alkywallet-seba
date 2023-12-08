@@ -3,9 +3,11 @@ package com.alkemy.wallet.controller;
 import com.alkemy.wallet.dto.AccountDto;
 
 
+import com.alkemy.wallet.dto.request.UpdateAccountRequestDto;
 import com.alkemy.wallet.dto.response.PageableAccountResponseDto;
 import com.alkemy.wallet.service.AccountServiceImpl;
 import com.alkemy.wallet.service.IAccountService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,6 +43,13 @@ public class AccountController {
         //TODO: crear dto de respuesta
        AccountDto account = accountService.createAccount(currency,token);
        return new ResponseEntity<>(account,HttpStatus.CREATED);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<AccountDto> updateTransactionLimit(@PathVariable Long id, @Valid @RequestBody UpdateAccountRequestDto updateRequest, @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
+        System.out.println(updateRequest.getNewTransactionLimit());
+        AccountDto accountDto = accountService.updateTransactionLimit(id,updateRequest,token);
+        return new ResponseEntity<>(accountDto,HttpStatus.OK);
     }
 
 }

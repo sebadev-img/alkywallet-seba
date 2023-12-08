@@ -1,6 +1,7 @@
 package com.alkemy.wallet.service;
 
 import com.alkemy.wallet.dto.AccountDto;
+import com.alkemy.wallet.dto.request.UpdateAccountRequestDto;
 import com.alkemy.wallet.dto.response.PageableAccountResponseDto;
 import com.alkemy.wallet.entity.Account;
 import com.alkemy.wallet.enums.ECurrency;
@@ -14,5 +15,7 @@ public interface IAccountService {
     List<AccountDto> getAccountsByUserId(Long userId);
 
     AccountDto createAccount(String currency, String token);
+
+    AccountDto updateTransactionLimit(Long id, UpdateAccountRequestDto updateRequest, String token);
 
 }
