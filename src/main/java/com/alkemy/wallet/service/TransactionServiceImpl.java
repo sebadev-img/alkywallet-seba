@@ -1,16 +1,18 @@
 package com.alkemy.wallet.service;
 
 import com.alkemy.wallet.dto.TransactionDto;
-import com.alkemy.wallet.dto.request.DepositRequestDto;
+import com.alkemy.wallet.dto.request.TransactionRequestDto;
+import com.alkemy.wallet.dto.response.TransactionResponseDto;
 import com.alkemy.wallet.entity.Account;
 import com.alkemy.wallet.entity.Transaction;
 import com.alkemy.wallet.entity.User;
-import com.alkemy.wallet.enums.ETransaction;
+import com.alkemy.wallet.enums.ETransactionType;
 import com.alkemy.wallet.repository.IAccountRepository;
 import com.alkemy.wallet.repository.ITransactionRepository;
 import com.alkemy.wallet.repository.IUserRepository;
 import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestHeader;
 
 import java.util.List;
@@ -55,7 +57,7 @@ public class TransactionServiceImpl implements ITransactionService{
     }
 
     @Override
-    public Boolean createDeposit(DepositRequestDto depositRequest, String token){
+    public Boolean createDeposit(TransactionRequestDto depositRequest, String token){
         if(depositRequest.getAmount() < 0.00){
             return null;
         }
@@ -71,7 +73,7 @@ public class TransactionServiceImpl implements ITransactionService{
                 Account account = accountOptional.get();
                 Transaction newTransaction = new Transaction();
                 newTransaction.setAmount(depositRequest.getAmount());
-                newTransaction.setType(ETransaction.DEPOSIT);
+                newTransaction.setType(ETransactionType.DEPOSIT);
                 newTransaction.setDescription(depositRequest.getDescription());
                 newTransaction.setAccount(account);
                 transactionRepository.save(newTransaction);
@@ -83,5 +85,46 @@ public class TransactionServiceImpl implements ITransactionService{
             }
         }
         return false;
+    }
+
+    @Override
+    public TransactionResponseDto createPayment(TransactionRequestDto paymentRequest, String token) {
+        if(paymentRequest.getAmount() < 0.00){
+            return null;
+        }
+        String userEmail = jwtService.extractUserName(token.substring(7));
+        Optional<User> userOptional = userRepository.findByEmail(userEmail);
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            List<Account> userAccounts = user.getAccounts();
+            Optional<Account> accountOptional = userAccounts.stream()
+                    .filter(account -> account.getCurrency().name().equals(paymentRequest.getCurrency()))
+                    .findFirst();
+            if(accountOptional.isPresent()){
+                Account account = accountOptional.get();
+                if(account.getBalance() >= paymentRequest.getAmount()){
+                    Transaction newTransaction = new Transaction();
+                    newTransaction.setAmount(paymentRequest.getAmount());
+                    newTransaction.setType(ETransactionType.DEPOSIT);
+                    newTransaction.setDescription(StringUtils.hasText(paymentRequest.getDescription()) ? paymentRequest.getDescription() : "");
+                    newTransaction.setAccount(account);
+                    Transaction transactionCreated = transactionRepository.save(newTransaction);
+
+                    account.setBalance(account.getBalance() - paymentRequest.getAmount());
+                    accountRepository.save(account);
+                    return new TransactionResponseDto(
+                            user.getEmail(),
+                            account.getId(),
+                            transactionCreated.getId(),
+                            paymentRequest.getCurrency(),
+                            ETransactionType.PAYMENT.name(),
+                            transactionCreated.getAmount(),
+                            transactionCreated.getDescription(),
+                            transactionCreated.getTransactionDate()
+                    );
+                }
+            }
+        }
+        return null;
     }
 }

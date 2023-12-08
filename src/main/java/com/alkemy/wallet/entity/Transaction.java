@@ -1,6 +1,6 @@
 package com.alkemy.wallet.entity;
 
-import com.alkemy.wallet.enums.ETransaction;
+import com.alkemy.wallet.enums.ETransactionType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -26,7 +26,7 @@ public class Transaction {
 
     @Column(name = "TYPE", nullable = false)
     @Enumerated(EnumType.STRING)
-    private ETransaction type;
+    private ETransactionType type;
 
     @Column(name = "DESCRIPTION", nullable = false)
     private String description;
