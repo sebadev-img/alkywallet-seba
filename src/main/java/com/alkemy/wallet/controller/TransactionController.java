@@ -23,9 +23,9 @@ public class TransactionController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TransactionDto> getTransaction(@PathVariable Long id, @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
-        TransactionDto transactionDto = transactionService.getTransaction(id,token);
-        return new ResponseEntity<>(transactionDto,HttpStatus.OK);
+    public ResponseEntity<TransactionResponseDto> getTransaction(@PathVariable Long id, @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
+        TransactionResponseDto transactionResponse = transactionService.getTransaction(id,token);
+        return new ResponseEntity<>(transactionResponse,HttpStatus.OK);
     }
 
     @PostMapping("/deposit")

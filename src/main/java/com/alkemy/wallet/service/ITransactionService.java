@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 
 public interface ITransactionService {
 
-    TransactionDto getTransaction(Long id,@RequestHeader(name = HttpHeaders.AUTHORIZATION) String token);
+    TransactionResponseDto getTransaction(Long id,String token);
 
     Boolean createDeposit(TransactionRequestDto depositRequest, String token);
     TransactionResponseDto createPayment(TransactionRequestDto paymentRequest, String token);
