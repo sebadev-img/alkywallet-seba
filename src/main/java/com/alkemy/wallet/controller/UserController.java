@@ -2,6 +2,7 @@ package com.alkemy.wallet.controller;
 
 import com.alkemy.wallet.dto.UserDto;
 import com.alkemy.wallet.dto.response.PageableUserResponseDto;
+import com.alkemy.wallet.dto.response.UserInfoResponseDto;
 import com.alkemy.wallet.entity.User;
 import com.alkemy.wallet.service.IUserService;
 import com.alkemy.wallet.service.UserServiceImpl;
@@ -34,5 +35,11 @@ public class UserController {
 
         User user=userService.deleteUserById(id);
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<UserInfoResponseDto> getUserById(@PathVariable Long id, @RequestHeader(name = HttpHeaders.AUTHORIZATION) String token){
+        UserInfoResponseDto userInfo = userService.getUserById(id,token);
+        return new ResponseEntity<>(userInfo,HttpStatus.OK);
     }
 }
