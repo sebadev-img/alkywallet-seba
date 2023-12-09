@@ -2,6 +2,7 @@ package com.alkemy.wallet.service;
 
 import com.alkemy.wallet.dto.AccountDto;
 import com.alkemy.wallet.dto.UserDto;
+import com.alkemy.wallet.dto.request.UserUpdateRequestDto;
 import com.alkemy.wallet.dto.response.PageableUserResponseDto;
 import com.alkemy.wallet.dto.response.UserInfoResponseDto;
 import com.alkemy.wallet.entity.Account;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,10 +27,12 @@ public class UserServiceImpl implements IUserService{
 
     private final IUserRepository userRepository;
     private final IJwtService jwtService;
+    //private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(IUserRepository userRepository,JwtServiceImpl jwtService){
         this.userRepository = userRepository;
         this.jwtService = jwtService;
+        //this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -98,6 +103,40 @@ public class UserServiceImpl implements IUserService{
             user.setSoftDelete(Boolean.TRUE);
             userRepository.save(user);
             return user;
+        }
+        return null;
+    }
+
+    @Override
+    public UserInfoResponseDto updateUser(Long id, UserUpdateRequestDto userRequest, String token) {
+        Optional<User> userOptional = userRepository.findById(id);
+        if(userOptional.isPresent()){
+            User user = userOptional.get();
+            String userEmail = jwtService.extractUserName(token.substring(7));
+            if(Objects.equals(userEmail, user.getEmail())){
+                boolean isUpdated = false;
+                if(userRequest.getFirstName() != null && !userRequest.getFirstName().isBlank()){
+                    user.setFirstName(userRequest.getFirstName());
+                    isUpdated = true;
+                }
+                if(userRequest.getLastName() != null && !userRequest.getLastName().isBlank()){
+                    user.setLastName(userRequest.getLastName());
+                    isUpdated = true;
+                }
+                if(userRequest.getPassword() != null && !userRequest.getPassword().isBlank()){
+                    user.setPassword(new BCryptPasswordEncoder().encode(userRequest.getPassword()));
+                    isUpdated = true;
+                }
+                if(isUpdated){
+                    userRepository.save(user);
+                    return new UserInfoResponseDto(
+                            user.getEmail(),
+                            user.getFirstName(),
+                            user.getLastName(),
+                            user.getUpdateDate()
+                    );
+                }
+            }
         }
         return null;
     }
